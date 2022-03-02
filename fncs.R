@@ -48,6 +48,9 @@ image_batch = function(df_file,level=1)
 
 img_plot = function(imgs,pl_name)
 {
+  max_imgs = 8
+  if(length(imgs)>max_imgs)
+    imgs = imgs[sample(1:length(imgs),10,replace = F)]
   patch = image_ggplot(image_read(imgs[1])) + ggtitle(pl_name)
   for(i in 2:length(imgs))
     patch = patch + image_ggplot(image_read(imgs[i]))

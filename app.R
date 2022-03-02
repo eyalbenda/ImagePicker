@@ -76,7 +76,7 @@ server <- function(input, output) {
     observeEvent(input$next_folder,
                    if(isolate(input$batch) < length(isolate(path_object$parsed_batch())))
                    {
-                     updateNumericInput(inputId = "batch",value = cur_batch + 1)
+                     updateNumericInput(inputId = "batch",value = isolate(input$batch) + 1)
                    } 
                  )
     
