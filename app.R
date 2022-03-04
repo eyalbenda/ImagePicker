@@ -15,7 +15,7 @@ source("fncs.R")
 ui <- fluidPage(
     useShinyjs(),
     # Application title
-    titlePanel("TrIage of Non-organized DirEctoRies of microSCOPy imagEs (TinderScope) "),
+    titlePanel("Triage of Images in Neighboring Directories with variable scope (TinderSCOPE) "),
     sidebarLayout(
       sidebarPanel(
     #Select a folder to work with
