@@ -1,6 +1,7 @@
 library(tidyverse)
 library(magick)
 library(patchwork)
+library(tools)
 image_parse = function(dr,exts)
 {
   ext_str = paste(exts,collapse="|")
@@ -48,11 +49,29 @@ image_batch = function(df_file,level=1)
 
 img_plot = function(imgs,pl_name)
 {
-  max_imgs = 8
+  max_imgs = 10
   if(length(imgs)>max_imgs)
     imgs = imgs[sample(1:length(imgs),max_imgs,replace = F)]
   patch = image_ggplot(image_read(imgs[1])) + ggtitle(pl_name)
-  for(i in 2:length(imgs))
-    patch = patch + image_ggplot(image_read(imgs[i]))
+  if(length(imgs)>1)
+    for(i in 2:length(imgs))
+      patch = patch + image_ggplot(image_read(imgs[i]))
   return(patch)
+}
+
+imgs_crop = function(full_images_path,relative_images_path,coords,dir_out = tempdir()){
+  output_path = file.path(dir_out,relative_images_path)
+  width = coords$xmax - coords$xmin
+  height = coords$ymax - coords$ymin
+  x_off = coords$xmin
+  y_off = coords$ymin
+  imgs_readlist = list()
+  for(i in 1:length(full_images_path))
+  {
+    img = image_read(full_images_path[i])
+    img = image_crop(img,geometry_area(width=width,height=height,x_off=x_off,y_off=y_off),repage=T)
+    if(!dir.exists(dirname(output_path[i])))dir.create(dirname(output_path[i]),recursive = T)
+    image_write(img,path = output_path[i],format = file_ext(full_images_path[i]))
+  }
+  return(output_path)   
 }
